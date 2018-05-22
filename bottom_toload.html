@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Visable area loading demo</title>
+</head>
+<body>
+	<div class="scrolldiv"></div>
+	<style type="text/css">
+		* {
+			margin: 0;
+			border: 1px solid red;
+		}
+
+		body::before {
+			content: '';
+			display: 'table';
+		}
+		.scrolldiv {
+			width: 500px;
+			height: 400px;
+			margin:1000px auto 100px auto;
+			background-color: #ff0000;
+		}
+
+		@-webkit-keyframes fadeInLeft {
+			0% {
+				opacity: 0;
+				-webkit-transform: translate3d(-100%, 0, 0);
+				transform: translate3d(-100%, 0, 0)
+			}
+			100% {
+				opacity: 1;
+				-webkit-transform: translate3d(-100%, 0, 0);
+				-ms-transform:translate3d(-100%, 0, 0);
+				transform: translate3d(-100%, 0, 0)
+			}
+		}
+
+		@keyframes fadeInLeft {
+			0% {
+				opacity: 0;
+				-webkit-transform:translate3d(-100%, 0, 0);
+				-ms-transform: translate3d(-100%, 0, 0);
+				transform: translate3d(-100%, 0, 0)
+			}
+
+			100% {
+				opacity: 1;
+				-webkit-transform:none;
+				-ms-transform: none;
+				transform: none
+			}
+		}
+
+		.fadeInLeft {
+			-webkit-animation-name: fadeInLeft;
+			animation-name: fadeInLeft;
+			-webkit-animation-duration: 2s;
+			animation-duration: 2s;
+		}
+	</style>
+	<script type="text/javascript">
+		// function showDiv() {
+		// 	var showId = document.getElementById("showDiv");
+		// 	var clients = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		// 	var divTop = showId.getBoundingClientRect().top;
+		// 	if(divTop <= clients) {
+		// 		showId.classList.add("fadeInLeft");
+		// 	}
+		// }
+
+		var clients = window.innerHeight || document.documentElement.clientHeight ||
+						  document.body.clientHeight;
+			var scrollTop = document.documentElement.scrollTop;
+			var wholeHeight = document.documentElement.scrollHeight;
+			console.log("clients:"+clients);
+			console.log("scrollTop:"+scrollTop);
+			console.log("wholeHeight:"+wholeHeight);
+
+		function scrollBottomOrTop() {
+			var clients = window.innerHeight || document.documentElement.clientHeight ||
+						  document.body.clientHeight;
+			var scrollTop = document.documentElement.scrollTop;
+			var wholeHeight = document.documentElement.scrollHeight;
+			console.log("clients:"+clients);
+			console.log("scrollTop:"+scrollTop);
+			console.log("wholeHeight:"+wholeHeight);
+
+
+			if(clients + scrollTop >= wholeHeight) {
+				alert("Get to the bottom!");
+			}
+			if (scrollTop == 0) {
+				alert("Get to the top!");
+			}
+		}
+
+		window.onscroll = scrollBottomOrTop;
+
+
+	</script>
+</body>
+</html>
