@@ -14,9 +14,25 @@ $(document).ready(function() {
 		mouseInSub = false;
 	});
 
+
+	var mouseTrack = [];
+
+	var moveHandler = function(e) {
+		mouseTrack.push({
+			x: e.pageX,
+			y: e.pageY
+		});
+
+		if(mouseTrack.length > 3) {
+			mouseTrack.shift()
+		}
+	} ;
+
 	$('#test')
 		.on('mouseenter', function(e) {
 			sub.removeClass('none');
+
+			$(document).bind('mousemove', moveHandler);
 		})
 		.on('mouseleave', function(e) {
 			sub.addClass('none');
@@ -30,6 +46,8 @@ $(document).ready(function() {
 				activeMenu.addClass('none');
 				activeMenu = null;
 			}
+
+			$(document).unbind('mousemove', moveHandler);
 		})
 		.on('mouseenter', 'li', function(e) {
 			if(!activeRow) {
@@ -42,21 +60,45 @@ $(document).ready(function() {
 			if(timer) {
 				clearTimeout(timer);
 			}
-			// 这里元素如果存在的话，先将元素的激活状态，取消掉，然后重新复制激活元素，执行上，面同样的步骤，
-			timer = setTimeout(function() {
-				if(mouseInSub){
-					return;
-				}
 
-				activeRow.removeClass('active');
-				activeMenu.addClass('none');
+			//鼠标坐标点的记录
+			var curMousePos = mouseTrack[mouseTrack.length-1];
+			var leftCorner = mouseTrack[mouseTrack.length-2];
+
+			var delay = needDelay(sub, leftCorner, curMousePos);
+
+			if(delay) {
+				// 这里元素如果存在的话，先将元素的激活状态，取消掉，然后重新复制激活元素，执行上，面同样的步骤，
+				timer = setTimeout(function() {
+					if(mouseInSub){
+						return;
+					}
+
+					activeRow.removeClass('active');
+					activeMenu.addClass('none');
+
+					activeRow = $(e.target);
+					activeRow.addClass('active');
+					activeMenu = $('#' + activeRow.data('id'));
+					activeMenu.removeClass('none');
+					timer = null
+				}, 300);
+			} else {
+				var prevActiveRow = activeRow;
+				var prevActiveMenu = activeMenu;
 
 				activeRow = $(e.target);
-				activeRow.addClass('active');
 				activeMenu = $('#' + activeRow.data('id'));
+
+				prevActiveRow.removeClass('active');
+				prevActiveMenu.addClass('none');
+
+				activeRow.addClass('active');
 				activeMenu.removeClass('none');
-				timer = null
-			}, 300);
+			}
+
+
+			
 			
 
 		});
