@@ -1,3 +1,4 @@
+//这里向量的叉积的意义不明白，方法的实际流程还不明确 待解决
 function sameSign(a, b) {
 	return  (a ^ b ) >= 0;
 }
